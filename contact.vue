@@ -1,30 +1,92 @@
-<template>
-  <div class="contact-page">
-    <h1 class="title">Contact Us</h1>
-    <p class="subtitle">We would love to hear from you!</p>
-    <form class="contact-form" @submit.prevent="submitForm">
-      <input v-model="form.name" type="text" placeholder="Your Name" required />
-      <input v-model="form.email" type="email" placeholder="Your Email" required />
-      <textarea v-model="form.message" rows="5" placeholder="Your Message" required></textarea>
-      <button type="submit" class="submit-btn">Send Message</button>
-    </form>
-  </div>
-</template>
-
 <script setup>
 import { ref } from 'vue'
 
 const form = ref({
   name: '',
   email: '',
-  message: '',
+  message: ''
 })
 
-const submitForm = () => {
-  alert(`Thank you, ${form.value.name}! We'll get back to you soon.`)
-  form.value = { name: '', email: '', message: '' }
+const isLoading = ref(false)
+const successMessage = ref('')
+const errorMessage = ref('')
+
+const submitForm = async () => {
+  try {
+    isLoading.value = true
+    errorMessage.value = ''
+    successMessage.value = ''
+    
+    const response = await fetch('http://localhost:8001/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(form.value)
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.detail || 'Failed to send message')
+    }
+
+    const data = await response.json()
+    successMessage.value = data.message
+    form.value = { name: '', email: '', message: '' }
+    
+  } catch (err) {
+    errorMessage.value = err.message || 'An error occurred. Please try again.'
+  } finally {
+    isLoading.value = false
+  }
 }
 </script>
+
+<template>
+  <div class="contact-page">
+    <h1 class="title">Contact Us</h1>
+    <p class="subtitle">We would love to hear from you!</p>
+    
+    <form class="contact-form" @submit.prevent="submitForm">
+      <input 
+        v-model="form.name" 
+        type="text" 
+        placeholder="Your Name" 
+        required
+        :disabled="isLoading"
+        class="form-input"
+      />
+      <input 
+        v-model="form.email" 
+        type="email" 
+        placeholder="Your Email" 
+        required
+        :disabled="isLoading"
+        class="form-input"
+      />
+      <textarea 
+        v-model="form.message" 
+        rows="5" 
+        placeholder="Your Message" 
+        required
+        :disabled="isLoading"
+        class="form-textarea"
+      ></textarea>
+      
+      <button 
+        type="submit" 
+        class="submit-btn"
+        :disabled="isLoading"
+      >
+        <span v-if="!isLoading">Send Message</span>
+        <span v-else class="loading-spinner"></span>
+      </button>
+      
+      <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
+      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+    </form>
+  </div>
+</template>
 
 <style scoped>
 .contact-page {

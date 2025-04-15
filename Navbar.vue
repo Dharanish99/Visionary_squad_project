@@ -4,6 +4,7 @@
     <div class="space-x-4">
       <NuxtLink to="/">Home</NuxtLink>
       <NuxtLink to="/login">Login</NuxtLink>
+      <NuxtLink to="/report">Report</NuxtLink>
       <NuxtLink to="/search">Search</NuxtLink>
       <NuxtLink to="/chatbot">Chatbot</NuxtLink>
       <NuxtLink to="/about">About</NuxtLink>

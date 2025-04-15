@@ -1,4 +1,45 @@
+<script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const email = ref('user@example.com')
+const password = ref('123456')
+const error = ref('')
+const router = useRouter()
+
+const login = async () => {
+  try {
+    const response = await fetch('http://localhost:8000/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: email.value,
+        password: password.value
+      })
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.detail || 'Login failed')
+    }
+
+    const data = await response.json()
+    
+    localStorage.setItem('auth_token', data.access_token)
+    localStorage.setItem('user_email', email.value)
+    
+    router.push('/')
+  } catch (err) {
+    error.value = err.message
+    console.error('Login error:', err)
+  }
+}
+</script>
+
 <template>
+  <!-- Keep your existing template exactly as is -->
   <div class="login-page">
     <div class="login-box">
       <h1>Login</h1>
@@ -10,29 +51,8 @@
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-
-const email = ref('')
-const password = ref('')
-const error = ref('')
-const router = useRouter()
-
-const login = () => {
-  if (email.value === 'user@example.com' && password.value === '123456') {
-    localStorage.setItem('loggedIn', 'true')
-    router.push('/')
-  } else {
-    error.value = 'Invalid credentials. Try again.'
-  }
-  const loggedIn = useCookie('loggedIn')
-loggedIn.value = true  // This marks the user as authenticated
-
-}
-</script>
-
 <style scoped>
+/* Keep all your existing styles exactly as is */
 .login-page {
   height: 100vh;
   display: flex;
@@ -40,7 +60,7 @@ loggedIn.value = true  // This marks the user as authenticated
   justify-content: center;
   background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
   font-family: 'Georgia', serif;
-  animation: fadeIn 2s ease;
+  animation: fadeIn 0.6s ease-out;
 }
 
 .login-box {
@@ -50,32 +70,38 @@ loggedIn.value = true  // This marks the user as authenticated
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   width: 300px;
   text-align: center;
-  animation: bounceIn 1s;
+  animation: smoothAppear 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  opacity: 0;
 }
 
 input {
   width: 100%;
-  padding: 0.8rem;
-  margin: 1rem 0;
+  padding: 12px 15px;
+  margin: 10px 0;
   border: 1px solid #ddd;
-  border-radius: 0.5rem;
-  transition: 0.3s;
+  border-radius: 25px;
+  font-size: 14px;
+  transition: all 0.3s;
+  box-sizing: border-box;
 }
 
 input:focus {
-  border-color: #fda085;
   outline: none;
+  border-color: #fda085;
+  box-shadow: 0 0 0 2px rgba(253, 160, 133, 0.2);
 }
 
 button {
   background: #fda085;
   border: none;
   color: white;
-  padding: 0.8rem 1.5rem;
-  border-radius: 0.5rem;
+  padding: 12px 20px;
+  border-radius: 25px;
   cursor: pointer;
   font-weight: bold;
   transition: 0.3s;
+  width: 100%;
+  margin-top: 10px;
 }
 
 button:hover {
@@ -87,17 +113,26 @@ button:hover {
   margin-top: 1rem;
 }
 
-/* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-@keyframes bounceIn {
-  0% { transform: scale(0.5); opacity: 0; }
-  60% { transform: scale(1.1); opacity: 1; }
-  80% { transform: scale(0.9); }
-  100% { transform: scale(1); }
+@keyframes smoothAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 </style>
 

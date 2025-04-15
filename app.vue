@@ -1,4 +1,5 @@
 <!-- Example HTML structure for Nuxt 3 with enhancements -->
+<!-- Example HTML structure for Nuxt 3 with enhancements -->
 <template>
   <div class="page-container">
     <header>
@@ -6,9 +7,10 @@
         <NuxtLink to="/login" class="nav-link">Login</NuxtLink>
         <NuxtLink to="/" class="nav-link">Home</NuxtLink>
         
-        <NuxtLink to="/about" class="nav-link">About</NuxtLink>
+        <!--NuxtLink to="/about" class="nav-link">About</NuxtLink-->
         <NuxtLink to="/report" class="nav-link">Report</NuxtLink>
-        <NuxtLink to="/events" class="nav-link">Events</NuxtLink>
+        <NuxtLink to="/search" class="nav-link">Search</NuxtLink>
+        <!--NuxtLink to="/events" class="nav-link">Events</NuxtLink-->
         <NuxtLink to="/gallery" class="nav-link">Gallery</NuxtLink>
         <NuxtLink to="/contact" class="nav-link">Contact</NuxtLink>
         
@@ -88,3 +90,4 @@
 </script>
 
 <!-- Ensure image is placed at /public/images/family-hugging.jpg -->
+

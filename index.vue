@@ -28,9 +28,9 @@
 </template>
 
 <script setup>
-const router = useRouter()
+ const router = useRouter()
 router.replace('/login')
- 
+
 const steps = [
   { title: "1. Search", desc: "Browse or search through reported persons and found individuals." },
   { title: "2. Report", desc: "Submit missing person details including name, photo, and last seen location." },

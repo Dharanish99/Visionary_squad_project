@@ -93,7 +93,7 @@ async def http_exception_handler(request: Request, exc: HTTPException):
         headers=exc.headers
     )
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     import uvicorn
     uvicorn.run(
         "login_api:app",

@@ -144,7 +144,6 @@ const getPhotoUrl = (path) => {
   // In production, you would use a proper URL
   return path ? `http://localhost:8003/${path}` : ''
 }
-
 const submitSearch = async () => {
   isSubmitting.value = true
   searchPerformed.value = false
@@ -153,9 +152,14 @@ const submitSearch = async () => {
   try {
     const formData = new FormData()
     
-    // Append all form fields
+    // Convert datetime to ISO string if it exists
+    if (form.value.datetime) {
+      formData.append('datetime', new Date(form.value.datetime).toISOString())
+    }
+    
+    // Append other form fields
     Object.entries(form.value).forEach(([key, value]) => {
-      if (value !== null && value !== '') {
+      if (value !== null && value !== '' && key !== 'datetime') {
         if (key === 'photo') {
           if (value) formData.append(key, value)
         } else {
@@ -379,4 +383,3 @@ const viewDetails = (reportId) => {
   }
 }
 </style>
-  

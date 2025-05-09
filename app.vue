@@ -1,21 +1,13 @@
-<!-- Example HTML structure for Nuxt 3 with enhancements -->
-<!-- Example HTML structure for Nuxt 3 with enhancements -->
 <template>
   <div class="page-container">
-    <header>
+    <header v-if="showNav">
       <nav class="navbar">
-        <NuxtLink to="/login" class="nav-link">Login</NuxtLink>
         <NuxtLink to="/" class="nav-link">Home</NuxtLink>
-        
-        <!--NuxtLink to="/about" class="nav-link">About</NuxtLink-->
         <NuxtLink to="/report" class="nav-link">Report</NuxtLink>
         <NuxtLink to="/search" class="nav-link">Search</NuxtLink>
-        <!--NuxtLink to="/events" class="nav-link">Events</NuxtLink-->
         <NuxtLink to="/gallery" class="nav-link">Gallery</NuxtLink>
         <NuxtLink to="/contact" class="nav-link">Contact</NuxtLink>
-        
         <NuxtLink to="/chatbot" class="nav-link">Chatbot</NuxtLink>
-
       </nav>
     </header>
 
@@ -28,6 +20,16 @@
     </footer>
   </div>
 </template>
+
+<script setup>
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
+const showNav = computed(() => {
+  return route.path !== '/login'
+})
+</script>
 
 <style scoped>
 .page-container {
@@ -45,12 +47,13 @@
   justify-content: center;
   gap: 2rem;
   padding: 1rem;
-  background: rgba(0, 0, 0, 0.6);
+  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
   color: white;
   animation: slideDown 1s ease-in-out;
   position: sticky;
   top: 0;
   z-index: 1000;
+  border-bottom: 2px solid #ffc107;
 }
 
 .nav-link {
@@ -67,11 +70,12 @@
 
 .footer {
   text-align: center;
-  background: rgba(0, 0, 0, 0.7);
+  background: #2c5364;
   color: white;
   padding: 1rem;
   font-size: 0.9rem;
   animation: fadeIn 1.5s ease-in;
+  border-top: 2px solid #ffc107;
 }
 
 @keyframes fadeIn {
@@ -84,10 +88,3 @@
   to { transform: translateY(0); }
 }
 </style>
-
-<script setup>
-// JavaScript enhancements (if needed)
-</script>
-
-<!-- Ensure image is placed at /public/images/family-hugging.jpg -->
-
